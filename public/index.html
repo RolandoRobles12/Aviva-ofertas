@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Oferta - Aviva Crédito</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a4d4d 0%, #2d6b6b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === PANTALLA 1: OFERTA INICIAL === */
+        .oferta-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .header p {
+            font-size: 17px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .header .efectivo-badge {
+            display: inline-block;
+            background: rgba(61, 213, 152, 0.2);
+            color: #3dd598;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid #3dd598;
+            margin-top: 8px;
+        }
+
+        .offer-card {
+            background: linear-gradient(135deg, #1a4d4d 0%, #2d6b6b 100%);
+            padding: 60px 40px;
+            border-radius: 24px 24px 0 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .amount-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+
+        .blob {
+            position: absolute;
+            width: 280px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at 30% 30%, #3dd598 0%, #2d9d75 100%);
+            border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .amount {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #3dd598 0%, #2bc084 100%);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(61, 213, 152, 0.3);
+        }
+
+        .amount-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .amount-label {
+            font-size: 20px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .term-label {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        .term {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            padding: 14px 32px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+
+        .payment-info {
+            color: white;
+        }
+
+        .payment-label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .payment-amount {
+            font-size: 36px;
+            font-weight: 700;
+            padding: 18px 36px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            display: inline-block;
+        }
+
+        .actions-card {
+            background: white;
+            padding: 40px;
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            text-align: center;
+            color: #1a4d4d;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 16px 12px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1.3;
+        }
+
+        .btn-accept {
+            background: #3dd598;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #2bc084;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(61, 213, 152, 0.4);
+        }
+
+        .btn-reject {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-reject:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-edit {
+            padding: 16px 12px;
+            background: white;
+            border: 2px solid #3dd598;
+            color: #3dd598;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1.3;
+        }
+
+        .btn-edit:hover {
+            background: #f0fdf9;
+            border-color: #2bc084;
+            color: #2bc084;
+        }
+
+        /* === PANTALLA 2: AJUSTE === */
+        .ajuste-container {
+            background: white;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .ajuste-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .ajuste-header h1 {
+            color: #1a4d4d;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .ajuste-header p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .ajuste-header .efectivo-badge {
+            display: inline-block;
+            background: rgba(61, 213, 152, 0.1);
+            color: #2bc084;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #3dd598;
+        }
+
+        .original-offer {
+            background: #f0f9f9;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #e0f0f0;
+        }
+
+        .original-offer h3 {
+            color: #1a4d4d;
+            font-size: 14px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .original-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .original-value {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .original-value label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .original-value span {
+            color: #1a4d4d;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .slider-group {
+            margin-bottom: 35px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .slider-label label {
+            color: #1a4d4d;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .slider-value {
+            background: #3dd598;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #3dd598;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(61, 213, 152, 0.4);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #3dd598;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(61, 213, 152, 0.4);
+        }
+
+        .slider-limits {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #1a4d4d 0%, #2d6b6b 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(26, 77, 77, 0.3);
+        }
+
+        .result-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-amount {
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .result-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+
+        .summary {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            color: #1a4d4d;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* === PANTALLA 3: CONFIRMACIÓN === */
+        .confirmacion-container {
+            background: white;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #3dd598 0%, #2bc084 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .checkmark {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.5s ease-out 0.3s forwards;
+        }
+
+        @keyframes drawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .confirmacion-container h1 {
+            color: #1a4d4d;
+            font-size: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .efectivo-note {
+            background: rgba(61, 213, 152, 0.1);
+            color: #2bc084;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid #3dd598;
+            margin-bottom: 30px;
+        }
+
+        .summary-box {
+            background: #f8f8f8;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .summary-title {
+            color: #1a4d4d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #3dd598 0%, #2bc084 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .highlight-label {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .highlight-value {
+            color: white;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f0f9f9;
+            border-radius: 12px;
+            border-left: 4px solid #3dd598;
+            text-align: left;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: #3dd598;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary:hover {
+            background: #2bc084;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(61, 213, 152, 0.4);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            background: white;
+            border: 2px solid #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f8f8;
+            border-color: #d0d0d0;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .header h1 { font-size: 24px; }
+            .header p { font-size: 15px; }
+            .amount-value { font-size: 40px; }
+            .amount-label { font-size: 18px; }
+            .term { font-size: 24px; padding: 12px 28px; }
+            .payment-amount { font-size: 30px; padding: 16px 28px; }
+            .question { font-size: 20px; }
+            .buttons { 
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .btn, .btn-edit { 
+                font-size: 15px;
+                padding: 14px 10px;
+            }
+            .ajuste-container { padding: 30px 20px; }
+            .result-amount { font-size: 40px; }
+            .confirmacion-container { padding: 40px 30px; }
+            .confirmacion-container h1 { font-size: 26px; }
+            .highlight-value { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA 1: OFERTA INICIAL -->
+    <div id="screenOferta" class="screen active">
+        <div class="oferta-container">
+            <div class="header">
+                <h1 id="userName">Hola Lazaro Luis</h1>
+                <p>¡Gracias por ser un gran cliente! Tu renovación en efectivo está lista para ti 💚</p>
+                <div class="efectivo-badge">💰 Depósito directo a tu cuenta bancaria</div>
+            </div>
+
+            <div class="offer-card">
+                <div class="amount-container">
+                    <div class="blob"></div>
+                    <div class="amount">
+                        <div class="amount-value" id="offerAmount">$7,000</div>
+                        <div class="amount-label">Pesos</div>
+                    </div>
+                </div>
+
+                <div class="term-label">a un plazo de</div>
+                <div class="term" id="offerTerm">16 Semanas</div>
+
+                <div class="payment-info">
+                    <div class="payment-label">Pagos Semanales</div>
+                    <div class="payment-amount" id="weeklyPayment">$552.37</div>
+                </div>
+            </div>
+
+            <div class="actions-card">
+                <div class="question">¿Aceptas la oferta?</div>
+                
+                <div class="buttons">
+                    <button class="btn btn-accept" onclick="aceptarOfertaDirecta()">Aceptar</button>
+                    <button class="btn btn-edit" onclick="mostrarAjuste()">Necesito un monto menor</button>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-edit" onclick="mostrarAjuste()">Necesito más plazos</button>
+                    <button class="btn btn-edit" onclick="mostrarAjuste()">Necesito menos plazos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: AJUSTE -->
+    <div id="screenAjuste" class="screen">
+        <div class="ajuste-container">
+            <div class="ajuste-header">
+                <h1>Ajusta tu Renovación</h1>
+                <p>Modifica el monto o plazo según tus necesidades</p>
+                <div class="efectivo-badge">💰 Depósito directo a tu cuenta</div>
+            </div>
+
+            <div class="original-offer">
+                <h3>Oferta Original</h3>
+                <div class="original-values">
+                    <div class="original-value">
+                        <label>Monto</label>
+                        <span id="originalAmount">$7,000</span>
+                    </div>
+                    <div class="original-value">
+                        <label>Plazo</label>
+                        <span id="originalPeriod">16 semanas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <label>Monto Solicitado</label>
+                    <span class="slider-value" id="montoDisplay">$7,000</span>
+                </div>
+                <input type="range" id="montoSlider" min="1000" max="7000" step="100" value="7000">
+                <div class="slider-limits">
+                    <span id="minMonto">$1,000</span>
+                    <span id="maxMonto">$7,000</span>
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <label>Plazo en Semanas</label>
+                    <span class="slider-value" id="plazosDisplay">16</span>
+                </div>
+                <input type="range" id="plazosSlider" min="14" max="20" step="1" value="16">
+                <div class="slider-limits">
+                    <span id="minPlazos">14 semanas</span>
+                    <span id="maxPlazos">20 semanas</span>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-label">Pago Semanal</div>
+                <div class="result-amount" id="pagoSemanal">$552.37</div>
+                <div class="result-subtitle">por <span id="periodosFinales">16</span> semanas</div>
+            </div>
+
+            <div class="summary">
+                <div class="summary-row">
+                    <span class="summary-label">Monto a recibir</span>
+                    <span class="summary-value" id="montoFinal">$7,000</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total de intereses</span>
+                    <span class="summary-value" id="totalIntereses">$1,837.92</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total a pagar</span>
+                    <span class="summary-value" id="totalPagar">$8,837.92</span>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="cancelarAjuste()">Cancelar</button>
+                <button class="btn btn-accept" onclick="aceptarOfertaAjustada()">Aceptar Oferta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: CONFIRMACIÓN -->
+    <div id="screenConfirmacion" class="screen">
+        <div class="confirmacion-container">
+            <div class="success-icon">
+                <svg viewBox="0 0 52 52">
+                    <path class="checkmark" d="M14 27l7 7 16-16"/>
+                </svg>
+            </div>
+
+            <h1>¡Oferta Confirmada!</h1>
+            <p class="subtitle">¡Ya falta poco! La renovación de tu préstamo está pre aprobada y recibirás tu dinero pronto.</p>
+            
+            <div class="efectivo-note">
+                💰 El dinero será depositado directamente a tu cuenta bancaria
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-label">Recibirás</div>
+                <div class="highlight-value" id="confirmAmount">$7,000</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Resumen de tu préstamo</div>
+                
+                <div class="summary-item">
+                    <span class="summary-label">Plazo</span>
+                    <span class="summary-value" id="confirmPeriod">16 semanas</span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Pago semanal</span>
+                    <span class="summary-value" id="confirmPayment">$552.37</span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Total a pagar</span>
+                    <span class="summary-value" id="confirmTotal">$8,837.92</span>
+                </div>
+            </div>
+
+            <div class="info-text">
+                <strong>A continuación necesitarás los siguientes documentos:</strong><br><br>
+                • Foto de tu INE por ambos lados<br>
+                • Comprobante de domicilio: recibo de luz, internet o teléfono no mayor a 3 meses (en original o PDF)<br>
+                • Geolocalización<br>
+                • Video 1: Cuéntanos cómo te va en tu trabajo<br>
+                • Video 2: Menciona para qué utilizarás el préstamo<br>
+                • Carátula de estado de cuenta con CLABE interbancaria propia
+            </div>
+
+            <button class="btn btn-primary" onclick="subirDocumentosApp()">Subir documentos en la app</button>
+            <button class="btn btn-secondary" onclick="subirDocumentosWhatsApp()">Subir documentos por WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 4: YA PROCESADO -->
+    <div id="screenYaProcesado" class="screen">
+        <div class="confirmacion-container">
+            <div class="success-icon">
+                <svg viewBox="0 0 52 52">
+                    <path class="checkmark" d="M14 27l7 7 16-16"/>
+                </svg>
+            </div>
+
+            <h1>¡Gracias por tu Confianza!</h1>
+            <p class="subtitle">Tu solicitud de renovación ya fue procesada. Pronto recibirás tu dinero en tu cuenta bancaria.</p>
+            
+            <div class="efectivo-note">
+                💰 El depósito se realizará directamente a tu cuenta
+            </div>
+
+            <div class="info-text">
+                <strong>¿Tienes dudas o comentarios?</strong><br><br>
+                Nuestro equipo está listo para ayudarte. Contáctanos por WhatsApp y te atenderemos de inmediato.
+            </div>
+
+            <button class="btn btn-primary" onclick="subirDocumentosWhatsApp()">
+                📱 Contactar por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURACIÓN DE FIREBASE =====
+        const FIREBASE_FUNCTIONS_URL = 'https://us-central1-ajustes-oferta.cloudfunctions.net';
+        
+        // CONFIGURACIÓN GLOBAL
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        let CONFIG = {
+            nombre: 'Cliente',
+            montoOriginal: 7000,
+            periodosOriginal: 16,
+            pagoOriginal: 552.37,
+            tasaSemanal: 0.0288,
+            techoMonto: 7000,
+            dealId: urlParams.get('deal_id') || ''
+        };
+
+        // Variables globales para ajuste
+        let montoSlider, plazosSlider;
+        let resultadoAjuste = null;
+        let datosHubSpotCargados = false;
+
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', inicializar);
+
+        async function inicializar() {
+            // Si hay deal_id, cargar datos desde HubSpot
+            if (CONFIG.dealId) {
+                await cargarDatosHubSpot();
+            } else {
+                // Usar parámetros de URL como fallback
+                CONFIG.nombre = urlParams.get('nombre') || 'Cliente';
+                CONFIG.montoOriginal = parseInt(urlParams.get('monto')) || 7000;
+                CONFIG.periodosOriginal = parseInt(urlParams.get('periodos')) || 16;
+                CONFIG.pagoOriginal = parseFloat(urlParams.get('pago')) || 552.37;
+                CONFIG.tasaSemanal = parseFloat(urlParams.get('tasa')) || 0.0288;
+                CONFIG.techoMonto = CONFIG.montoOriginal;
+            }
+
+            configurarPantallaInicial();
+            configurarPantallaAjuste();
+        }
+
+        async function cargarDatosHubSpot() {
+            try {
+                // Mostrar indicador de carga
+                document.body.style.opacity = '0.5';
+                
+                const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/getDealData?deal_id=${CONFIG.dealId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar datos de HubSpot');
+                }
+                
+                const data = await response.json();
+                
+                // Verificar si ya fue procesado (ajuste_pantalla = true)
+                if (data.yaProcesado) {
+                    document.body.style.opacity = '1';
+                    mostrarPantalla('screenYaProcesado');
+                    return;
+                }
+                
+                // Actualizar CONFIG con datos de HubSpot
+                CONFIG.nombre = data.nombre;
+                CONFIG.montoOriginal = data.monto;
+                CONFIG.periodosOriginal = data.periodos;
+                CONFIG.pagoOriginal = data.pago;
+                CONFIG.tasaSemanal = data.tasa;
+                CONFIG.techoMonto = data.monto;
+                
+                datosHubSpotCargados = true;
+                document.body.style.opacity = '1';
+                
+            } catch (error) {
+                console.error('Error al cargar datos de HubSpot:', error);
+                alert('Error al cargar los datos de la oferta. Por favor intenta de nuevo.');
+                document.body.style.opacity = '1';
+            }
+        }
+
+        function configurarPantallaInicial() {
+            // Configurar pantalla inicial
+            document.getElementById('userName').textContent = `Hola ${CONFIG.nombre}`;
+            document.getElementById('offerAmount').textContent = formatCurrency(CONFIG.montoOriginal);
+            document.getElementById('offerTerm').textContent = `${CONFIG.periodosOriginal} Semanas`;
+            document.getElementById('weeklyPayment').textContent = formatCurrency(CONFIG.pagoOriginal);
+        }
+
+        function configurarPantallaAjuste() {
+            // Configurar pantalla de ajuste
+            document.getElementById('originalAmount').textContent = formatCurrency(CONFIG.montoOriginal);
+            document.getElementById('originalPeriod').textContent = `${CONFIG.periodosOriginal} semanas`;
+
+            montoSlider = document.getElementById('montoSlider');
+            plazosSlider = document.getElementById('plazosSlider');
+
+            configurarLimitesIniciales();
+            
+            montoSlider.addEventListener('input', () => {
+                ajustarLimitesPlazos();
+                actualizarDisplay();
+            });
+            plazosSlider.addEventListener('input', actualizarDisplay);
+        }
+
+        // === NAVEGACIÓN ENTRE PANTALLAS ===
+        function mostrarPantalla(pantallaId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(pantallaId).classList.add('active');
+        }
+
+        function mostrarAjuste() {
+            mostrarPantalla('screenAjuste');
+            configurarLimitesIniciales();
+            actualizarDisplay();
+        }
+
+        function cancelarAjuste() {
+            mostrarPantalla('screenOferta');
+        }
+
+        // === LÓGICA DE AJUSTE ===
+        function configurarLimitesIniciales() {
+            const minMonto = CONFIG.techoMonto > 2000 ? 2000 : 1000;
+            montoSlider.min = minMonto;
+            montoSlider.max = CONFIG.techoMonto;
+            montoSlider.value = CONFIG.montoOriginal;
+            
+            document.getElementById('minMonto').textContent = formatCurrency(minMonto);
+            document.getElementById('maxMonto').textContent = formatCurrency(CONFIG.techoMonto);
+
+            const minPlazos = Math.max(1, CONFIG.periodosOriginal - 2);
+            const maxPlazos = CONFIG.periodosOriginal + 4;
+            plazosSlider.min = minPlazos;
+            plazosSlider.max = maxPlazos;
+            plazosSlider.value = CONFIG.periodosOriginal;
+
+            document.getElementById('minPlazos').textContent = `${minPlazos} semanas`;
+            document.getElementById('maxPlazos').textContent = `${maxPlazos} semanas`;
+        }
+
+        function ajustarLimitesPlazos() {
+            const nuevoMontoReq = parseInt(montoSlider.value);
+            const cambioMonto = nuevoMontoReq - CONFIG.montoOriginal;
+
+            let minPlazos, maxPlazos;
+
+            if (cambioMonto < 0) {
+                const minimo = CONFIG.techoMonto > 2000 ? 2000 : 1000;
+                const montoAjustado = Math.max(minimo, nuevoMontoReq);
+                const reduccionMonto = (CONFIG.montoOriginal - montoAjustado) / 1000;
+                const semanasDesbloqueadas = 2 + (reduccionMonto * 2);
+                
+                minPlazos = Math.max(1, Math.floor(CONFIG.periodosOriginal - semanasDesbloqueadas));
+                maxPlazos = CONFIG.periodosOriginal + 4;
+            } else if (cambioMonto > 0) {
+                minPlazos = Math.max(1, CONFIG.periodosOriginal - 2);
+                maxPlazos = CONFIG.periodosOriginal + 4;
+            } else {
+                minPlazos = CONFIG.periodosOriginal;
+                maxPlazos = CONFIG.periodosOriginal + 4;
+            }
+
+            plazosSlider.min = minPlazos;
+            plazosSlider.max = maxPlazos;
+            
+            if (parseInt(plazosSlider.value) < minPlazos) {
+                plazosSlider.value = minPlazos;
+            }
+            if (parseInt(plazosSlider.value) > maxPlazos) {
+                plazosSlider.value = maxPlazos;
+            }
+
+            document.getElementById('minPlazos').textContent = `${minPlazos} semanas`;
+            document.getElementById('maxPlazos').textContent = `${maxPlazos} semanas`;
+        }
+
+        function aplicarReglas() {
+            const nuevoMontoReq = parseInt(montoSlider.value);
+            const plazosSolicitados = parseInt(plazosSlider.value);
+            const cambioMonto = nuevoMontoReq - CONFIG.montoOriginal;
+            const cambioPlazos = plazosSolicitados - CONFIG.periodosOriginal;
+
+            let montoAprobado;
+            if (nuevoMontoReq > 0 && nuevoMontoReq <= CONFIG.techoMonto) {
+                const minimo = CONFIG.techoMonto > 2000 ? 2000 : 1000;
+                montoAprobado = Math.max(minimo, nuevoMontoReq);
+            } else {
+                montoAprobado = CONFIG.montoOriginal;
+            }
+
+            let periodosFinales;
+            
+            if (cambioMonto > 0 && cambioPlazos === 0) {
+                periodosFinales = CONFIG.periodosOriginal;
+            } else if (cambioMonto < 0 && cambioPlazos === 0) {
+                periodosFinales = CONFIG.periodosOriginal;
+            } else if (cambioMonto === 0 && cambioPlazos > 0) {
+                periodosFinales = Math.min(plazosSolicitados, CONFIG.periodosOriginal + 4);
+            } else if (cambioMonto === 0 && cambioPlazos < 0) {
+                periodosFinales = CONFIG.periodosOriginal;
+            } else if (cambioMonto > 0 && cambioPlazos > 0) {
+                periodosFinales = Math.min(plazosSolicitados, CONFIG.periodosOriginal + 4);
+            } else if (cambioMonto > 0 && cambioPlazos < 0) {
+                periodosFinales = Math.max(plazosSolicitados, CONFIG.periodosOriginal - 2);
+            } else if (cambioMonto < 0 && cambioPlazos > 0) {
+                periodosFinales = Math.min(plazosSolicitados, CONFIG.periodosOriginal + 4);
+            } else if (cambioMonto < 0 && cambioPlazos < 0) {
+                const minimo = CONFIG.techoMonto > 2000 ? 2000 : 1000;
+                const montoAjustado = Math.max(minimo, montoAprobado);
+                const reduccionMonto = (CONFIG.montoOriginal - montoAjustado) / 1000;
+                const semanasDesbloqueadas = 2 + (reduccionMonto * 2);
+                const plazoMinimo = CONFIG.periodosOriginal - semanasDesbloqueadas;
+                periodosFinales = Math.max(plazosSolicitados, plazoMinimo);
+            } else {
+                periodosFinales = CONFIG.periodosOriginal;
+            }
+
+            // Asegurar que periodosFinales sea un entero
+            periodosFinales = Math.round(periodosFinales);
+
+            let pago;
+            if (CONFIG.tasaSemanal > 0 && periodosFinales > 0) {
+                const r = CONFIG.tasaSemanal;
+                const n = periodosFinales;
+                pago = (montoAprobado * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            } else {
+                pago = montoAprobado / periodosFinales;
+            }
+
+            return { monto: montoAprobado, periodos: periodosFinales, pago: pago };
+        }
+
+        function actualizarDisplay() {
+            const resultado = aplicarReglas();
+            resultadoAjuste = resultado;
+
+            document.getElementById('montoDisplay').textContent = formatCurrency(parseInt(montoSlider.value));
+            document.getElementById('plazosDisplay').textContent = parseInt(plazosSlider.value);
+            document.getElementById('pagoSemanal').textContent = formatCurrency(resultado.pago);
+            document.getElementById('periodosFinales').textContent = resultado.periodos;
+            document.getElementById('montoFinal').textContent = formatCurrency(resultado.monto);
+            
+            const totalAPagar = resultado.pago * resultado.periodos;
+            const intereses = totalAPagar - resultado.monto;
+            
+            document.getElementById('totalIntereses').textContent = formatCurrency(intereses);
+            document.getElementById('totalPagar').textContent = formatCurrency(totalAPagar);
+        }
+
+        // === ACCIONES ===
+        async function aceptarOfertaDirecta() {
+            if (CONFIG.dealId && datosHubSpotCargados) {
+                try {
+                    const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/aceptarOferta`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            deal_id: CONFIG.dealId,
+                            marcar_procesado: true
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Error al enviar aceptación');
+                    }
+
+                    mostrarConfirmacion(CONFIG.montoOriginal, CONFIG.periodosOriginal, CONFIG.pagoOriginal);
+                } catch (error) {
+                    console.error('Error al aceptar oferta:', error);
+                    alert('Error al procesar tu respuesta. Por favor intenta de nuevo.');
+                }
+            } else {
+                mostrarConfirmacion(CONFIG.montoOriginal, CONFIG.periodosOriginal, CONFIG.pagoOriginal);
+            }
+        }
+
+        async function aceptarOfertaAjustada() {
+            if (!resultadoAjuste) return;
+            
+            if (CONFIG.dealId && datosHubSpotCargados) {
+                try {
+                    const datosAjuste = {
+                        deal_id: CONFIG.dealId,
+                        nuevo_monto_solicitado: parseInt(montoSlider.value),
+                        plazos_solicitados: parseInt(plazosSlider.value),
+                        monto_aprobado: resultadoAjuste.monto,
+                        periodos_finales: resultadoAjuste.periodos,
+                        pago_final: resultadoAjuste.pago,
+                        marcar_procesado: true
+                    };
+
+                    const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/ajustarOferta`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datosAjuste)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Error al enviar ajuste');
+                    }
+
+                    mostrarConfirmacion(resultadoAjuste.monto, resultadoAjuste.periodos, resultadoAjuste.pago);
+                } catch (error) {
+                    console.error('Error al ajustar oferta:', error);
+                    alert('Error al procesar tu respuesta. Por favor intenta de nuevo.');
+                }
+            } else {
+                mostrarConfirmacion(resultadoAjuste.monto, resultadoAjuste.periodos, resultadoAjuste.pago);
+            }
+        }
+
+        function mostrarConfirmacion(monto, periodos, pago) {
+            const total = pago * periodos;
+            
+            document.getElementById('confirmAmount').textContent = formatCurrency(monto);
+            document.getElementById('confirmPeriod').textContent = `${periodos} semanas`;
+            document.getElementById('confirmPayment').textContent = formatCurrency(pago);
+            document.getElementById('confirmTotal').textContent = formatCurrency(total);
+            
+            mostrarPantalla('screenConfirmacion');
+        }
+
+        async function rechazarOferta() {
+            if (!confirm('¿Estás seguro de rechazar esta oferta?')) {
+                return;
+            }
+
+            if (CONFIG.dealId && datosHubSpotCargados) {
+                try {
+                    const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/rechazarOferta`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            deal_id: CONFIG.dealId
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Error al enviar rechazo');
+                    }
+
+                    alert('Oferta rechazada. Gracias por tu tiempo.');
+                } catch (error) {
+                    console.error('Error al rechazar oferta:', error);
+                    alert('Error al procesar tu respuesta. Por favor intenta de nuevo.');
+                }
+            } else {
+                alert('Oferta rechazada. Gracias por tu tiempo.');
+            }
+        }
+
+        function subirDocumentosApp() {
+            // Redirigir a Google Play Store
+            window.open('https://play.google.com/store/apps/details?id=mx.com.aviva.customer', '_blank');
+        }
+
+        function subirDocumentosWhatsApp() {
+            // Número de WhatsApp de Aviva Crédito
+            const numeroWhatsApp = '5215644083183';
+            const mensaje = encodeURIComponent('Hola, quiero subir los documentos para mi préstamo aprobado.');
+            
+            // Abrir WhatsApp
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, '_blank');
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2
+            }).format(value);
+        }
+    </script>
+</body>
+</html>

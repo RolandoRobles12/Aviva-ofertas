@@ -131,7 +131,7 @@ exports.aceptarOferta = functions.https.onRequest(async (req, res) => {
         return res.status(405).json({ error: 'Método no permitido' });
       }
 
-      const { deal_id, marcar_procesado } = req.body;
+      const { deal_id, marcar_procesado, utm_source } = req.body;
 
       if (!deal_id) {
         return res.status(400).json({ error: 'deal_id es requerido' });
@@ -144,6 +144,11 @@ exports.aceptarOferta = functions.https.onRequest(async (req, res) => {
       // Si se solicita, marcar como procesado
       if (marcar_procesado) {
         properties.ajuste_pantalla = 'true';
+      }
+
+      // Guardar canal de origen (whatsapp, email, etc.)
+      if (utm_source) {
+        properties.utm_source = utm_source;
       }
 
       // Actualizar el deal
@@ -199,7 +204,8 @@ exports.ajustarOferta = functions.https.onRequest(async (req, res) => {
         monto_aprobado,
         periodos_finales,
         pago_final,
-        marcar_procesado
+        marcar_procesado,
+        utm_source
       } = req.body;
 
       if (!deal_id) {
@@ -218,6 +224,11 @@ exports.ajustarOferta = functions.https.onRequest(async (req, res) => {
       // Si se solicita, marcar como procesado
       if (marcar_procesado) {
         properties.ajuste_pantalla = 'true';
+      }
+
+      // Guardar canal de origen (whatsapp, email, etc.)
+      if (utm_source) {
+        properties.utm_source = utm_source;
       }
 
       // Actualizar el deal con los nuevos valores
@@ -266,22 +277,22 @@ exports.rechazarOferta = functions.https.onRequest(async (req, res) => {
         return res.status(405).json({ error: 'Método no permitido' });
       }
 
-      const { deal_id } = req.body;
+      const { deal_id, utm_source } = req.body;
 
       if (!deal_id) {
         return res.status(400).json({ error: 'deal_id es requerido' });
       }
 
-      // Puedes crear un stage específico para rechazados o simplemente registrarlo
-      // Por ahora solo registramos que fue rechazado en una propiedad
+      const properties = {};
+
+      // Guardar canal de origen (whatsapp, email, etc.)
+      if (utm_source) {
+        properties.utm_source = utm_source;
+      }
+
       await axios.patch(
         `${HUBSPOT_API_URL}/crm/v3/objects/deals/${deal_id}`,
-        {
-          properties: {
-            // Puedes agregar un campo custom para registrar el rechazo
-            // Por ejemplo: estado_oferta: 'Rechazada'
-          }
-        },
+        { properties },
         {
           headers: {
             'Authorization': `Bearer ${HUBSPOT_TOKEN}`,

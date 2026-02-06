@@ -832,7 +832,8 @@
             pagoOriginal: 552.37,
             tasaSemanal: 0.0288,
             techoMonto: 7000,
-            dealId: urlParams.get('deal_id') || ''
+            dealId: urlParams.get('deal_id') || '',
+            utmSource: urlParams.get('utm_source') || ''
         };
 
         // Variables globales para ajuste
@@ -1080,7 +1081,8 @@
                         },
                         body: JSON.stringify({
                             deal_id: CONFIG.dealId,
-                            marcar_procesado: true
+                            marcar_procesado: true,
+                            utm_source: CONFIG.utmSource
                         })
                     });
 
@@ -1110,7 +1112,8 @@
                         monto_aprobado: resultadoAjuste.monto,
                         periodos_finales: resultadoAjuste.periodos,
                         pago_final: resultadoAjuste.pago,
-                        marcar_procesado: true
+                        marcar_procesado: true,
+                        utm_source: CONFIG.utmSource
                     };
 
                     const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/ajustarOferta`, {
@@ -1159,7 +1162,8 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            deal_id: CONFIG.dealId
+                            deal_id: CONFIG.dealId,
+                            utm_source: CONFIG.utmSource
                         })
                     });
 

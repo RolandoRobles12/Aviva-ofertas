@@ -11,6 +11,12 @@ const HUBSPOT_API_URL = 'https://api.hubapi.com';
 // CORS configuration
 const cors = require('cors')({ origin: true });
 
+// Mapeo de utm_source (URL param → valor interno HubSpot)
+const UTM_SOURCE_MAP = {
+  'whatsapp': 'WhatsApp Pantalla Ajuste',
+  'email': 'Email'
+};
+
 /**
  * Función para obtener los datos de un deal desde HubSpot
  * URL: https://YOUR-PROJECT.cloudfunctions.net/getDealData?deal_id=123456
@@ -146,9 +152,9 @@ exports.aceptarOferta = functions.https.onRequest(async (req, res) => {
         properties.ajuste_pantalla = 'true';
       }
 
-      // Guardar canal de origen (whatsapp, email, etc.)
-      if (utm_source) {
-        properties.utm_source = utm_source;
+      // Guardar canal de origen (WhatsApp Pantalla Ajuste, Email)
+      if (utm_source && UTM_SOURCE_MAP[utm_source]) {
+        properties.utm_source = UTM_SOURCE_MAP[utm_source];
       }
 
       // Actualizar el deal
@@ -226,9 +232,9 @@ exports.ajustarOferta = functions.https.onRequest(async (req, res) => {
         properties.ajuste_pantalla = 'true';
       }
 
-      // Guardar canal de origen (whatsapp, email, etc.)
-      if (utm_source) {
-        properties.utm_source = utm_source;
+      // Guardar canal de origen (WhatsApp Pantalla Ajuste, Email)
+      if (utm_source && UTM_SOURCE_MAP[utm_source]) {
+        properties.utm_source = UTM_SOURCE_MAP[utm_source];
       }
 
       // Actualizar el deal con los nuevos valores
@@ -285,9 +291,9 @@ exports.rechazarOferta = functions.https.onRequest(async (req, res) => {
 
       const properties = {};
 
-      // Guardar canal de origen (whatsapp, email, etc.)
-      if (utm_source) {
-        properties.utm_source = utm_source;
+      // Guardar canal de origen (WhatsApp Pantalla Ajuste, Email)
+      if (utm_source && UTM_SOURCE_MAP[utm_source]) {
+        properties.utm_source = UTM_SOURCE_MAP[utm_source];
       }
 
       await axios.patch(
